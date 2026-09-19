@@ -1,4 +1,5 @@
 name: Build Android APK
+
 on:
   push:
     branches: [ "master", "main" ]
@@ -23,7 +24,6 @@ jobs:
 
     - name: Find Project Root and Build APK
       run: |
-        # Ищем папку, где лежит settings.gradle или build.gradle
         BUILD_DIR=$(find . -maxdepth 3 -name "settings.gradle" -o -name "build.gradle" | head -n 1 | xargs dirname)
         
         if [ -z "$BUILD_DIR" ]; then
@@ -34,8 +34,7 @@ jobs:
         echo "Проект найден в папке: $BUILD_DIR"
         cd "$BUILD_DIR"
         
-        chmod +x gradlew || true
-        ./gradlew assembleDebug || gradle assembleDebug
+        gradle assembleDebug
 
     - name: Upload Built APK
       uses: actions/upload-artifact@v4
@@ -43,4 +42,5 @@ jobs:
         name: app-debug
         path: |
           **/build/outputs/apk/debug/*.apk
+
 
