@@ -34,6 +34,10 @@ jobs:
         echo "Проект найден в папке: $BUILD_DIR"
         cd "$BUILD_DIR"
         
+        # Включаем поддержку AndroidX
+        echo "android.useAndroidX=true" >> gradle.properties
+        echo "android.enableJetifier=true" >> gradle.properties
+        
         gradle assembleDebug
 
     - name: Upload Built APK
@@ -42,5 +46,6 @@ jobs:
         name: app-debug
         path: |
           **/build/outputs/apk/debug/*.apk
+
 
 
