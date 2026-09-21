@@ -1,4 +1,4 @@
-name: Build Android APK
+Name: Build Android APK
 
 on:
   push:
@@ -38,7 +38,11 @@ jobs:
         echo "android.useAndroidX=true" >> gradle.properties
         echo "android.enableJetifier=true" >> gradle.properties
         
-        gradle assembleDebug
+        # Запуск сборки с обходом блокировки 403 (User-Agent)
+        gradle assembleDebug \
+          -Dhttp.agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)" \
+          -Dorg.gradle.internal.repository.max.retries=10 \
+          -Dorg.gradle.internal.repository.initial.backoff=1000
 
     - name: Upload Built APK
       uses: actions/upload-artifact@v4
@@ -46,6 +50,7 @@ jobs:
         name: app-debug
         path: |
           **/build/outputs/apk/debug/*.apk
+
 
 
 
